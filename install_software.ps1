@@ -13,7 +13,7 @@ function Show-Menu {
     $counter = 1
 
     # Iterar sobre los programas instalados y agregarlos al menú
-    foreach ($program in $installedPrograms) {
+    foreach ($program in $programList) {
         Write-Host "  $($counter++). $($program.Name) - $($program.Description)" -ForegroundColor Cyan
     }
 
