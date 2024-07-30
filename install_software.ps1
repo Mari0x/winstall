@@ -15,15 +15,14 @@ function Install-Program {
         winget install "$programName"
     }
 
-    # Agregar registro de instalación
-    Add-Content -Path "install_log.txt" -Value "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] $programName $programVersion instalado."
-}
-# Lista de programas disponibles
+    # Lista de programas disponibles
 $programList = @("WinRAR", "7-Zip", "Visual Studio Code", "Chrome", "Steam", "Discord", "VLC")
 
-# Mostrar el menú de opciones y obtener la selección del usuario
-do {
-    Write-Host "Selecciona un programa a instalar:"
+# Inicializamos la variable para controlar el bucle
+$continue = $true
+
+while ($continue) {
+    Write-Host "Selecciona un programa a instalar"
     for ($i = 0; $i -lt $programList.Count; $i++) {
         Write-Host "$($i+1). $($programList[$i])"
     }
@@ -40,14 +39,14 @@ do {
     $program = $programList[$selectedOption - 1]
 
     # Preguntar si desea instalar el programa seleccionado
-    $confirm = Read-Host "¿Desea instalar $program? (s/n)" -eq "s"
+    $confirm = Read-Host "¿Desea instalar $program ? (s/n)" -eq "s"
     if ($confirm) {
         Install-Program -programName $program
         Write-Host "Instalación completa."
     }
 
-    # Preguntar si desea instalar otro programa y cerrar el script si la respuesta es "n"
+    # Preguntar si desea instalar otro programa y actualizar la variable $continue
     $continue = Read-Host "¿Desea instalar otro programa? (s/n)" -eq "s"
-} while ($continue)
+}
 
 Write-Host "¡Hasta luego!"
