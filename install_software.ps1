@@ -42,8 +42,7 @@ function Show-Menu {
     Write-Host ""
 
     Write-Host "╔════════════════════════════════════════════════════════╗"
-    Write-Host "║ No. ║ Nombre                   ║ Descripción                         ║"
-    Write-Host "╚════════════════════════════════════════════════════════╝"
+    Write-Host "║ No. ║ Nombre                   ║ Descripción           ║"
     Write-Host ""
 
     # Mostrar los programas en una tabla
