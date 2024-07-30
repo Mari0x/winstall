@@ -1,15 +1,9 @@
 # Función para leer la lista de programas desde un archivo JSON
 function Get-ProgramsFromJSON {
     $jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json"
-    try {
-        $jsonData = Invoke-WebRequest -Uri $jsonFile
-        return ConvertFrom-Json $jsonData.Content
-    } catch {
-        Write-Warning "Error al obtener el archivo JSON: $($_.Exception.Message)"
-        return $null
-    }
+    $jsonData = Invoke-WebRequest -Uri $jsonFile
+    return ConvertFrom-Json $jsonData.Content
 }
-
 # Función para mostrar el menú principal
 function Show-Menu {
     param(
@@ -61,6 +55,13 @@ function Install-Program {
 
 # Obtener la lista de programas desde el archivo JSON
 $programList = Get-ProgramsFromJSON
+
+if ($programList) {
+    Show-Menu -programList $programList -currentPage $currentPage
+    # Resto del código
+} else {
+    Write-Host "Error al obtener la lista de programas"
+}
 
 # Bucle principal
 $currentPage = 1
