@@ -46,6 +46,8 @@ do {
         Write-Host "Instalación completa."
     }
 
-    # Preguntar si desea instalar otro programa
+    # Preguntar si desea instalar otro programa y cerrar el script si la respuesta es "n"
     $continue = Read-Host "¿Desea instalar otro programa? (s/n)" -eq "s"
 } while ($continue)
+
+Write-Host "¡Hasta luego!"
