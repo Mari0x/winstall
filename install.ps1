@@ -1,2 +1,2 @@
-irm https://raw.githubusercontent.com/tu_usuario/install_software/main/install_software.ps1 | iex 
+irm https://raw.githubusercontent.com/Mari0x/winstall/main/install_software.ps1 | iex 
 
