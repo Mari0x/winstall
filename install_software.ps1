@@ -1,14 +1,3 @@
-param(
-    [Parameter(Mandatory=$true)]
-    [string]$program,
-
-    [Parameter(Mandatory=$false)]
-    [string]$version,
-
-    [Parameter(Mandatory=$false)]
-    [switch]$interactive
-)
-
 function Install-Program {
     param(
         [Parameter(Mandatory=$true)]
@@ -17,6 +6,7 @@ function Install-Program {
         [Parameter(Mandatory=$false)]
         [string]$programVersion
     )
+
     # Lógica de instalación utilizando Winget o otros gestores de paquetes
     Write-Host "Instalando $programName..."
     if ($programVersion) {
@@ -24,24 +14,33 @@ function Install-Program {
     } else {
         winget install "$programName"
     }
+
     # Agregar registro de instalación
     Add-Content -Path "install_log.txt" -Value "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] $programName $programVersion instalado."
 }
 
-switch ($program) {
-    "WinRAR" {
-        Install-Program -programName "WinRAR" -programVersion $version
-    }
-    "7-Zip" {
-        Install-Program -programName "7-Zip" -programVersion $version
-    }
-    # Agrega más casos aquí
-    default {
-        Write-Warning "Programa no válido: $program"
-    }
+# Lista de programas disponibles
+$programList = @("WinRAR", "7-Zip", "Visual Studio Code", "Chrome", "Steam", "Discord", "VLC")
+
+# Mostrar el menú de opciones
+Write-Host "Selecciona un programa a instalar:"
+for ($i = 0; $i -lt $programList.Count; $i++) {
+    Write-Host "$($i+1). $($programList[$i])"
 }
 
-if ($interactive) {
-    Write-Host "Instalación completada."
-    Read-Host "Presiona una tecla para continuar..."
+# Leer la opción seleccionada por el usuario
+$selectedOption = Read-Host "Ingrese el número de opción:"
+
+# Validar la opción seleccionada
+if ($selectedOption -gt $programList.Count -or $selectedOption -lt 1) {
+    Write-Host "Opción inválida."
+    exit
 }
+
+# Obtener el programa seleccionado
+$program = $programList[$selectedOption - 1]
+
+# Instalar el programa
+Install-Program -programName $program
+
+Write-Host "Instalación completa."
