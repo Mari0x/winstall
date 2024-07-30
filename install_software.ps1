@@ -1,12 +1,30 @@
 # Función para leer la lista de programas desde un archivo JSON
 function Get-ProgramsFromJSON {
-    $jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json"
-    $jsonData = Invoke-WebRequest -Uri $jsonFile
-    return ConvertFrom-Json $jsonData.Content
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json"
+    )
+
+    try {
+        $jsonData = Invoke-WebRequest -Uri $jsonFile
+        $parsedData = ConvertFrom-Json $jsonData.Content
+
+        # Verificar si la propiedad "Programas" existe y es un array
+        if ($parsedData.Programas -is [array]) {
+            return $parsedData.Programas
+        } else {
+            Write-Warning "La propiedad 'Programas' no existe o no es un array en el archivo JSON."
+            return $null
+        }
+    } catch {
+        Write-Warning "Error al obtener la lista de programas: $($_.Exception.Message)"
+        return $null
+    }
 }
+
 # Función para mostrar el menú principal
 function Show-Menu {
-    param(
+    param (
         [Parameter(Mandatory=$true)]
         [array]$programList,
         [int]$currentPage = 1,
@@ -15,32 +33,31 @@ function Show-Menu {
 
     Clear-Host
     Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║                   Winstall - Instalador                ║" -ForegroundColor Green
+    Write-Host "║          Winstall - Instalador        ║" -ForegroundColor Green
     Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
     Write-Host ""
 
-    # Calcular el índice inicial y final para la página actual
-    $startIndex = ($currentPage - 1) * $itemsPerPage
-    $endIndex = $startIndex + $itemsPerPage - 1
-
-    # Mostrar los programas de la página actual
-    for ($i = $startIndex; $i -le $endIndex -and $i -lt $programList.Count; $i++) {
-        Write-Host "  $($i + 1). $($programList[$i].Nombre) - $($programList[$i].Descripcion)" -ForegroundColor Cyan
+    # Mostrar los programas en una tabla
+    Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
+    Write-Host "║ No. ║ Nombre                      ║ Descripción           ║" -ForegroundColor Green
+    Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
+        Write-Host "║ {0,3} ║ {1,-25} ║ {2,-25} ║" -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion
     }
 
     # Agregar las opciones de navegación
     Write-Host ""
     if ($currentPage -gt 1) {
-        Write-Host "  Anterior"
+        Write-Host " Anterior"
     }
-    if ($endIndex -lt $programList.Count - 1) {
-        Write-Host "  Siguiente"
+    if ($i -lt $programList.Count) {
+        Write-Host " Siguiente"
     }
-    Write-Host "  0. Salir" -ForegroundColor Red
+    Write-Host " 0. Salir" -ForegroundColor Red
     Write-Host ""
 }
 
-# Función para instalar un programa (implementa tu lógica de instalación aquí)
+# Función para instalar un programa
 function Install-Program {
     param(
         [Parameter(Mandatory=$true)]
@@ -53,35 +70,44 @@ function Install-Program {
     Write-Host "Instalación de $programName completada."
 }
 
-# Obtener la lista de programas desde el archivo JSON
-$programList = Get-ProgramsFromJSON
+# Obtener la lista de programas
+$jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json"
+$programList = Get-ProgramsFromJSON -jsonFile $jsonFile
 
-if ($programList) {
-    Show-Menu -programList $programList -currentPage $currentPage
-    # Resto del código
-} else {
-    Write-Host "Error al obtener la lista de programas"
-}
-
-# Bucle principal
+# Mostrar el menú y manejar la interacción del usuario
 $currentPage = 1
 do {
     Show-Menu -programList $programList -currentPage $currentPage
-    $selectedOption = Read-Host "Ingrese el número de opción"
+
+    # Obtener la opción seleccionada por el usuario
+    $selectedOption = Read-Host "Ingrese el número de opción o el nombre del programa (para buscar):"
 
     # Validar la opción ingresada
     if ($selectedOption -eq "0") {
         break
-    } elseif ($selectedOption -gt $programList.Count -or $selectedOption -lt 1) {
-        Write-Host "Opción inválida. Intenta nuevamente."
-        continue
-    } elseif ($selectedOption -eq "Anterior") {
+    } elseif ($selectedOption -match '^\d+$') { # Si es un número
+        $index = [int]$selectedOption - 1
+        if ($index -ge 0 -and $index -lt $programList.Count) {
+            $program = $programList[$index]
+            Install-Program -programName $program.Nombre
+        } else {
+            Write-Host "Opción inválida."
+        }
+    } else {
+        # Buscar el programa por nombre
+        $foundProgram = $programList | Where-Object { $_.Nombre -match $selectedOption }
+        if ($foundProgram) {
+            Install-Program -programName $foundProgram.Nombre
+        } else {
+            Write-Host "Programa no encontrado."
+        }
+    }
+
+    # Actualizar la página actual si se seleccionó "Anterior" o "Siguiente"
+    if ($selectedOption -eq "Anterior") {
         $currentPage--
     } elseif ($selectedOption -eq "Siguiente") {
         $currentPage++
-    } else {
-        $program = $programList[$selectedOption - 1]
-        Install-Program -programName $program.Nombre
     }
 
 } while ($true)
