@@ -5,9 +5,19 @@ function Show-Menu {
     Write-Host "║                   Winstall - Instalador                ║" -ForegroundColor Green
     Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
     Write-Host ""
-    Write-Host "  1. WinRAR   - Compresor de archivos" -ForegroundColor Cyan
-    Write-Host "  2. 7-Zip    - Compresor de archivos" -ForegroundColor Cyan
-    # ... (agrega más opciones aquí)
+
+    # Obtener la lista de programas instalados
+    $installedPrograms = Get-Package -Provider Winget
+
+    # Crear un contador para numerar las opciones
+    $counter = 1
+
+    # Iterar sobre los programas instalados y agregarlos al menú
+    foreach ($program in $installedPrograms) {
+        Write-Host "  $($counter++). $($program.Name) - $($program.Description)" -ForegroundColor Cyan
+    }
+
+    # Agregar la opción de salir
     Write-Host ""
     Write-Host "  0. Salir" -ForegroundColor Red
     Write-Host ""
