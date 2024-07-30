@@ -1,0 +1,9 @@
+{
+    "Programas": [
+      {"Nombre": "WinRAR", "Descripcion": "Compresor de archivos"},
+      {"Nombre": "7-Zip", "Descripcion": "Compresor de archivos"},
+      {"Nombre": "Chrome", "Descripcion": "Navegador Web"},
+      {"Nombre": "Steam", "Descripcion": "Plataforma de Juegos"}
+    ]
+  }
+  
