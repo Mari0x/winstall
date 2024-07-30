@@ -32,9 +32,9 @@ function Show-Menu {
     )
 
     Clear-Host
-    Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║          Winstall - Instalador                         ║" -ForegroundColor Green
-    Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "╔════════════════════════════════════════════════════════╗" 
+    Write-Host "║          Winstall - Instalador                         ║" 
+    Write-Host "╚════════════════════════════════════════════════════════╝" 
     Write-Host ""
 
     # Mostrar los programas en una tabla
@@ -43,7 +43,8 @@ function Show-Menu {
     Write-Host "╚════════════════════════════════════════════════════════╝"
     Write-Host ""
 
-    for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
+   for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
+        # No utilizamos ForegroundColor aquí
         Write-Host "║ $($i + 1) ║ {0,-25} ║ {1,-25} ║" -f $programList[$i].Nombre, $programList[$i].Descripcion
     }
 
