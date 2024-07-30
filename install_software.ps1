@@ -22,36 +22,32 @@ function Install-Program {
 # Lista de programas disponibles
 $programList = @("WinRAR", "7-Zip", "Visual Studio Code", "Chrome", "Steam", "Discord", "VLC")
 
-# Array para almacenar las selecciones del usuario
-$selectedPrograms = @()
-
-# Bucle principal para permitir múltiples selecciones
-do {
-    # Mostrar el menú de opciones
-    Write-Host "Selecciona un programa a instalar:"
-    for ($i = 0; $i -lt $programList.Count; $i++) {
-        Write-Host "$($i+1). $($programList[$i])"
-    }
-
-    # Leer la opción seleccionada por el usuario
-    $selectedOption = Read-Host "Ingrese el número de opción (o 'q' para salir):"
-
-    # Validar la opción seleccionada
-    if ($selectedOption -eq 'q') {
-        break
-    } elseif ($selectedOption -gt $programList.Count -or $selectedOption -lt 1) {
-        Write-Host "Opción inválida."
-        continue
-    }
-
-    # Agregar el programa seleccionado al array
-    [array]$selectedPrograms += $selectedOption
-} while ($true)
-
-# Instalar los programas seleccionados
-foreach ($index in $selectedPrograms) {
-    $program = $programList[$index - 1]
-    Install-Program -programName $program
+# Mostrar el menú de opciones
+Write-Host "Selecciona un programa a instalar:"
+for ($i = 0; $i -lt $programList.Count; $i++) {
+    Write-Host "$($i+1). $($programList[$i])"
 }
 
+# Leer la opción seleccionada por el usuario
+$selectedOption = Read-Host "Ingrese el número de opción:"
+
+# Validar la opción seleccionada
+if ($selectedOption -gt $programList.Count -or $selectedOption -lt 1) {
+    Write-Host "Opción inválida."
+    exit
+}
+
+# Obtener el programa seleccionado
+$program = $programList[$selectedOption - 1]
+
+# Instalar el programa
+Install-Program -programName $program
+
 Write-Host "Instalación completa."
+
+# Preguntar si desea instalar otro programa
+$continue = Read-Host "¿Desea instalar otro programa? (s/n)" -eq "s"
+if ($continue) {
+    # Reiniciar el script
+    & "$PSScriptRoot\$PSScriptName"
+}
