@@ -27,7 +27,7 @@ function Install-Program {
         winget install "$programName"
         Write-Host "Instalación completada."
     } catch {
-        Write-Warning "Error al instalar $programName: $($_.Exception.Message)"
+        Write-Warning "Error al instalar $programName $($_.Exception.Message)"
     }
 }
 
