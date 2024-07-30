@@ -37,16 +37,16 @@ function Show-Menu {
     Write-Host "╚════════════════════════════════════════════════════════╝" 
     Write-Host ""
 
-    $divider = "╔════════════════════════════════════════════════════════╗"
+     $divider = "╔════════════════════════════════════════════════════════╗"
 
     # Encabezado de la tabla
     Write-Host $divider
-    Write-Host "║ No. ║ Nombre           ║ Descripción                   ║"
+    Write-Host "║ No. ║ Nombre           ║ Descripción          ║"
     Write-Host $divider
 
     # Cuerpo de la tabla
     for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
-        Write-Host "║ $($i + 1) ║ {0,-25} ║ {1,-25} ║" $programList[$i].Nombre, $programList[$i].Descripcion
+        Write-Host "║ $($i + 1) ║ {0,-25} ║ {1,-25} ║" -f $programList[$i].Nombre, $programList[$i].Descripcion
     }
 
     # Línea divisoria final
