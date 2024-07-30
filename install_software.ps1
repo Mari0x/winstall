@@ -1,6 +1,6 @@
 # Función para leer la lista de programas desde un archivo JSON
 function Get-ProgramsFromJSON {
-    $jsonFile = "programas.json" # Cambia el nombre del archivo si es necesario
+    $jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json" # Cambia el nombre del archivo si es necesario
     $jsonData = Get-Content $jsonFile | ConvertFrom-Json
     return $jsonData.Programas
 }
