@@ -1,8 +1,11 @@
+# Definir la variable del archivo JSON una sola vez
+$jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json"
+
 # Función para leer la lista de programas desde un archivo JSON
 function Get-ProgramsFromJSON {
     param (
         [Parameter(Mandatory=$true)]
-        [string]$jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json"
+        [string]$jsonFile
     )
 
     try {
@@ -47,7 +50,7 @@ function Show-Menu {
 
     # Mostrar los programas en una tabla
     for ($i = $startIndex; $i -le $endIndex; $i++) {
-        Write-Host "║ {0} ║ {1,-25} ║ {2,-35} ║" -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion
+        Write-Host ("║ {0} ║ {1,-25} ║ {2,-35} ║" -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion)
     }
 
     # Línea divisoria final
@@ -58,7 +61,7 @@ function Show-Menu {
     if ($currentPage -gt 1) {
         Write-Host " Anterior"
     }
-    if ($i -lt $programList.Count) {
+    if ($endIndex -lt $programList.Count - 1) {
         Write-Host " Siguiente"
     }
     Write-Host " 0. Salir"
@@ -83,7 +86,6 @@ function Install-Program {
 }
 
 # Obtener la lista de programas
-$jsonFile = "https://raw.githubusercontent.com/Mari0x/winstall/main/programas.json"
 $programList = Get-ProgramsFromJSON -jsonFile $jsonFile
 
 # Mostrar el menú y manejar la interacción del usuario
@@ -122,3 +124,4 @@ do {
         $currentPage++
     }
 } while ($true)
+
