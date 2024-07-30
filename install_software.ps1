@@ -33,20 +33,24 @@ function Show-Menu {
 
     Clear-Host
     Write-Host "╔════════════════════════════════════════════════════════╗" 
-    Write-Host "║          Winstall - Instalador                         ║" 
+    Write-Host "║                Winstall - Instalador                   ║" 
     Write-Host "╚════════════════════════════════════════════════════════╝" 
     Write-Host ""
 
-    # Mostrar los programas en una tabla
-    Write-Host "╔════════════════════════════════════════════════════════╗"
-    Write-Host "║ No. ║ Nombre           ║ Descripción                   ║"
-    Write-Host "╚════════════════════════════════════════════════════════╝"
-    Write-Host ""
+    $divider = "╔════════════════════════════════════════════════════════╗"
 
-   for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
-        # No utilizamos ForegroundColor aquí
+    # Encabezado de la tabla
+    Write-Host $divider
+    Write-Host "║ No. ║ Nombre           ║ Descripción                   ║"
+    Write-Host $divider
+
+    # Cuerpo de la tabla
+    for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
         Write-Host "║ $($i + 1) ║ {0,-25} ║ {1,-25} ║" -f $programList[$i].Nombre, $programList[$i].Descripcion
     }
+
+    # Línea divisoria final
+    Write-Host $divider
 
     # Agregar las opciones de navegación
     Write-Host ""
@@ -83,7 +87,7 @@ do {
     Show-Menu -programList $programList -currentPage $currentPage
 
     # Obtener la opción seleccionada por el usuario
-    $selectedOption = Read-Host "Ingrese el número de opción o el nombre del programa (para buscar):"
+    $selectedOption = Read-Host "Ingrese el número de opción o el nombre del programa (para buscar)"
 
     # Validar la opción ingresada
     if ($selectedOption -eq "0") {
