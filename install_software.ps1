@@ -41,6 +41,8 @@ function Show-Menu {
     Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
     Write-Host "║ No. ║ Nombre                      ║ Descripción        ║" -ForegroundColor Green
     Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host ""
+    
    for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
     Write-Host "║ $($i + 1) ║ {0,-25} ║ {1,-25} ║" -f $programList[$i].Nombre, $programList[$i].Descripcion
 }
@@ -53,7 +55,7 @@ function Show-Menu {
     if ($i -lt $programList.Count) {
         Write-Host " Siguiente"
     }
-    Write-Host " 0. Salir" -ForegroundColor Red
+    Write-Host " 0. Salir"
     Write-Host ""
 }
 
