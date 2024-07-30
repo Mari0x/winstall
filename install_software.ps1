@@ -31,33 +31,38 @@ function Show-Menu {
         [int]$itemsPerPage = 10
     )
 
+    # Calcular el índice inicial y final para la página actual
+    $startIndex = ($currentPage - 1) * $itemsPerPage
+    $endIndex = [Math]::Min(($currentPage * $itemsPerPage) - 1, $programList.Count - 1)
+
     Clear-Host
     Write-Host "╔════════════════════════════════════════════════════════╗" 
-    Write-Host "║                Winstall - Instalador                   ║" 
+    Write-Host "║           Winstall - Instalador                        ║" 
     Write-Host "╚════════════════════════════════════════════════════════╝" 
     Write-Host ""
 
     Write-Host "╔════════════════════════════════════════════════════════╗"
-    Write-Host "║ No. ║ Nombre           ║ Descripción          ║"
+    Write-Host "║ No. ║ Nombre                   ║ Descripción                         ║"
     Write-Host "╚════════════════════════════════════════════════════════╝"
     Write-Host ""
 
-    for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
-        -f $i + 1, $programList[$i].Nombre, $programList[$i].Descripcion
+    # Mostrar los programas en una tabla
+    for ($i = $startIndex; $i -le $endIndex; $i++) {
+        Write-Host "║ {0} ║ {1,-25} ║ {2,-35} ║" -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion
     }
 
     # Línea divisoria final
-    Write-Host $divider
+    Write-Host "╚════════════════════════════════════════════════════════╝"
 
     # Agregar las opciones de navegación
     Write-Host ""
     if ($currentPage -gt 1) {
-        Write-Host " Anterior"
+        Write-Host " Anterior"
     }
     if ($i -lt $programList.Count) {
-        Write-Host " Siguiente"
+        Write-Host " Siguiente"
     }
-    Write-Host " 0. Salir"
+    Write-Host " 0. Salir"
     Write-Host ""
 }
 
@@ -69,9 +74,13 @@ function Install-Program {
     )
 
     Write-Host "Instalando $programName..."
-    # Lógica de instalación (ej: usando Winget)
-    winget install "$programName"
-    Write-Host "Instalación de $programName completada."
+    # Verificar si winget está disponible
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        winget install "$programName"
+        Write-Host "Instalación de $programName completada."
+    } else {
+        Write-Warning "Winget no está instalado o no está disponible en el sistema."
+    }
 }
 
 # Obtener la lista de programas
@@ -108,10 +117,9 @@ do {
     }
 
     # Actualizar la página actual si se seleccionó "Anterior" o "Siguiente"
-    if ($selectedOption -eq "Anterior") {
+    if ($selectedOption -eq "Anterior" -and $currentPage -gt 1) {
         $currentPage--
-    } elseif ($selectedOption -eq "Siguiente") {
+    } elseif ($selectedOption -eq "Siguiente" -and $endIndex -lt $programList.Count - 1) {
         $currentPage++
     }
-
 } while ($true)
