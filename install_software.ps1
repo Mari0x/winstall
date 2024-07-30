@@ -33,16 +33,25 @@ function Show-Menu {
 
     Clear-Host
     Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║          Winstall - Instalador        ║" -ForegroundColor Green
+    Write-Host "║                  Winstall - Instalador                 ║" -ForegroundColor Green
     Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
     Write-Host ""
 
     # Mostrar los programas en una tabla
     Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║ No. ║ Nombre                      ║ Descripción           ║" -ForegroundColor Green
+    Write-Host "║ No. ║ Nombre                      ║ Descripción        ║" -ForegroundColor Green
     Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
     for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
-        Write-Host "║ {0,3} ║ {1,-25} ║ {2,-25} ║" -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion
+        # Asigna el color de forma adecuada
+        switch ($i % 4) {
+            0 { $color = "DarkBlue" }
+            1 { $color = "DarkGreen" }
+            2 { $color = "DarkCyan" }
+            3 { $color = "DarkRed" }
+            default { $color = "Gray" }
+        }
+
+        Write-Host "║ {0,3} ║ {1,-25} ║ {2,-25} ║" -ForegroundColor $color -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion
     }
 
     # Agregar las opciones de navegación
