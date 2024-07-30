@@ -43,7 +43,7 @@ function Show-Menu {
     Write-Host ""
 
     for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
-        Write-Host "║ {0} ║ {1,-25} ║ {2,-25} ║" -f $i + 1, $programList[$i].Nombre, $programList[$i].Descripcion
+        -f $i + 1, $programList[$i].Nombre, $programList[$i].Descripcion
     }
 
     # Línea divisoria final
