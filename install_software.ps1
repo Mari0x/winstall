@@ -33,19 +33,19 @@ function Show-Menu {
 
     Clear-Host
     Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║                  Winstall - Instalador                 ║" -ForegroundColor Green
+    Write-Host "║          Winstall - Instalador                         ║" -ForegroundColor Green
     Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
     Write-Host ""
 
     # Mostrar los programas en una tabla
-    Write-Host "╔════════════════════════════════════════════════════════╗" -ForegroundColor Green
-    Write-Host "║ No. ║ Nombre                      ║ Descripción        ║" -ForegroundColor Green
-    Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
+    Write-Host "╔════════════════════════════════════════════════════════╗"
+    Write-Host "║ No. ║ Nombre           ║ Descripción                   ║"
+    Write-Host "╚════════════════════════════════════════════════════════╝"
     Write-Host ""
-    
-   for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
-    Write-Host "║ $($i + 1) ║ {0,-25} ║ {1,-25} ║" -f $programList[$i].Nombre, $programList[$i].Descripcion
-}
+
+    for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
+        Write-Host "║ $($i + 1) ║ {0,-25} ║ {1,-25} ║" -f $programList[$i].Nombre, $programList[$i].Descripcion
+    }
 
     # Agregar las opciones de navegación
     Write-Host ""
