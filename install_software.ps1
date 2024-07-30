@@ -42,17 +42,17 @@ function Show-Menu {
     Write-Host "║ No. ║ Nombre                      ║ Descripción        ║" -ForegroundColor Green
     Write-Host "╚════════════════════════════════════════════════════════╝" -ForegroundColor Green
     for ($i = ($currentPage - 1) * $itemsPerPage; $i -lt $programList.Count -and $i -lt ($currentPage * $itemsPerPage); $i++) {
-        # Asigna el color de forma adecuada
-        switch ($i % 4) {
-            0 { $color = "DarkBlue" }
-            1 { $color = "DarkGreen" }
-            2 { $color = "DarkCyan" }
-            3 { $color = "DarkRed" }
-            default { $color = "Gray" }
-        }
-
-        Write-Host "║ {0,3} ║ {1,-25} ║ {2,-25} ║" -ForegroundColor $color -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion
+    # Asigna el color de forma adecuada
+    switch ($i % 4) {
+        0 { $color = "DarkBlue" }
+        1 { $color = "DarkGreen" }
+        2 { $color = "DarkCyan" }
+        3 { $color = "DarkRed" }
+        default { $color = "Gray" }
     }
+
+    Write-Host "║ {0,3} ║ {1,-25} ║ {2,-25} ║" -f ($i + 1), $programList[$i].Nombre, $programList[$i].Descripcion -ForegroundColor $color
+}
 
     # Agregar las opciones de navegación
     Write-Host ""
